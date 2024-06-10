@@ -1,18 +1,15 @@
 "use client";
 import { useQuery } from "react-query";
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import React from "react";
 import { Get_All_Posts } from "@/GraphQL/Queries";
-const rtkClient = new ApolloClient({
-  uri: "https://graphqlzero.almansi.me/api",
-  cache: new InMemoryCache(),
-});
+import { request } from 'graphql-request';
+
 const page = () => {
+    
   const { isLoading, error, data } = useQuery("allPosts", async () => {
-    const { data } = await rtkClient.query({
-      query: Get_All_Posts,
-    });
-    return data.posts.data;
+   const query =Get_All_Posts;
+   const responseData = await request('https://graphqlzero.almansi.me/api',query)
+   return responseData.posts.data;
   });
   console.log("fetched data", data); // Log the fetched data
 
